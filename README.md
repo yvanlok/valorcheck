@@ -10,6 +10,13 @@ Introducing ValorCheck! The open-source, privacy-friendly alternative to apps su
 - Player Card
 - Link to [tracker.gg](https://tracker.gg/valorant) profile for more in-depth stats
 
+## HOW TO RUN
+
+1. Install the latest version from the [releases](https://github.com/yvanlok/valorcheck/releases)
+2. Run the installer
+3. Launch the application while having Valorant open
+4. Catch smurfs and boosted players!
+
 ## Features coming soon
 - Party viewer
 - Skins viewer
@@ -20,6 +27,11 @@ Introducing ValorCheck! The open-source, privacy-friendly alternative to apps su
   - Change viewable stats
   - *Optional* analytics
 - Better support on different screens
+
+## Known issues (OPEN ISSUES IF FOUND)
+- Detects the game as running when the Riot client is open
+- Looks ugly on different resolutions/screens
+- Lots of errors in the debug console
 
 
 ## Credits
