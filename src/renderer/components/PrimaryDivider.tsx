@@ -14,7 +14,8 @@ const PrimaryDivider = (props: Props) => {
       <Divider
         variant="middle"
         sx={{
-          marginBottom: 2,
+          marginBottom: 1,
+          marginTop: 1,
           borderColor: theme.palette.primary.main, // Change color to match your design
         }}
         orientation={rotate ? "vertical" : "horizontal"} // Fix the conditional orientation setting

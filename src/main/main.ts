@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 import * as url from "url";
+import { shell } from "electron";
 
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -16,6 +17,7 @@ function createWindow() {
       devTools: process.env.NODE_ENV !== "production",
     },
     autoHideMenuBar: true,
+    resizable: false,
   });
 
   if (process.env.NODE_ENV === "development") {

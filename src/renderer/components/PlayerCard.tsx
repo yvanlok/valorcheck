@@ -29,6 +29,9 @@ import {
   getNameTagFromPuuid,
 } from "../../main/api/basicHelpers.mjs";
 import { getCardImage } from "../../main/api/getAssets/getPlayerCardAssets.mjs";
+import { fetchTracker } from "../../main/api/getStats/getTracker.mjs";
+import Link from "@mui/material/Link";
+import { handleClick } from "../../main/helpers";
 
 type AccountResponse = {
   data: {
@@ -56,6 +59,7 @@ type Props = {
   playerCardId?: string;
   queue?: string;
   accountLvl?: number;
+  rank?: number;
 };
 
 const PlayerCard = (props: Props) => {
@@ -67,6 +71,7 @@ const PlayerCard = (props: Props) => {
     playerCardId,
     queue,
     accountLvl,
+    rank,
   } = props;
   const [rankSrc, setRankSrc] = useState("");
   const [rankName, setRankName] = useState("");
@@ -74,13 +79,15 @@ const PlayerCard = (props: Props) => {
   const [playerName, setPlayerName] = useState("");
   const [accountLevel, setAccountLevel] = useState<number>();
   const [puuid, setPuuid] = useState(playerID);
-  const [rankTier, setRankTier] = useState();
+  const [rankTier, setRankTier] = useState(rank);
   const [agentSrc, setAgentSrc] = useState("");
   const [agentName, setAgentName] = useState("");
   const [agentUUID, setAgentUUID] = useState(agentID);
   const [matchData, setMatchData] = useState({});
   const [playerKD, setPlayerKD] = useState(0);
   const [playerWinPercentage, setPlayerWinPercentage] = useState(0);
+  const [playerTracker, setPlayerTracker] = useState("");
+
   useEffect(() => {
     const defineMatchData = async () => {
       const response = await fetchAllMatchResults(puuid);
@@ -111,7 +118,10 @@ const PlayerCard = (props: Props) => {
         setAccountLevel(accountLvl);
         setPlayerCard(await getCardImage(playerCardId));
       }
-      setRankTier(await fetchCurrentRank(puuid));
+      if (rankTier === 0 || rank === undefined) {
+        setRankTier(await fetchCurrentRank(puuid));
+      }
+      setPlayerTracker(await fetchTracker(puuid));
     };
 
     fetchAccountDetails();
@@ -186,6 +196,7 @@ const PlayerCard = (props: Props) => {
                   marginLeft: 0.1,
                   fontFamily: "Roboto",
                   fontWeight: "bold",
+                  fontSize: "17",
                 }}
                 style={{ color: "#9575CD" }}
               >
@@ -214,18 +225,35 @@ const PlayerCard = (props: Props) => {
                 }}
               ></Box>
             </Tooltip>
-            <Box sx={{ flex: 1 }}>
-              <Typography
+            <Box
+              sx={{
+                flex: 0.8,
+              }}
+            >
+              <Box
                 sx={{
-                  fontFamily: "Roboto",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  fontSize: "20",
+                  backgroundColor: theme.palette.primary.main,
+                  borderRadius: "5px",
                 }}
-                style={{ color: "#9575CD" }}
               >
-                {playerName}
-              </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Roboto",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "20",
+                  }}
+                  style={{ color: "#9575CD" }}
+                >
+                  <Link
+                    color="inherit"
+                    href={playerTracker}
+                    onClick={(e) => handleClick(e, playerTracker)}
+                  >
+                    {playerName}
+                  </Link>
+                </Typography>
+              </Box>
 
               <Box
                 sx={{

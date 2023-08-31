@@ -66,7 +66,15 @@ export async function fetchMatch() {
   }
 }
 
-export async function fetchMatchMode() {
-  const responseData = await fetchMatch();
-  return response
+export async function fetchMap() {
+  const match = await fetchMatchID();
+  const preMatch = await fetchPreMatchID();
+  let responseData;
+  if (match !== undefined) {
+    responseData = await fetchMatch();
+  } else if (preMatch !== undefined) {
+    responseData = await fetchPreMatch();
+  }
+
+  return responseData.MapID;
 }

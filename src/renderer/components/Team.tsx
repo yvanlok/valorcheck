@@ -11,24 +11,28 @@ type Player = {
   accountLvl: number;
   playerCardId: string;
   queueId: string;
-  rank: string;
+  rank: number;
 };
 
 type Props = {
   playerData: Player[];
   preGame?: boolean;
+  teamColor: string;
+  startPlayers: number;
+  endPlayers: number;
+  isDeathmatch?: boolean;
 };
 
-const RedTeam = (props: Props) => {
-  const redPlayers = props.playerData
-    .filter((player) => player.team === "Red")
-    .slice(0, 12);
-
+const Team = (props: Props) => {
+  const teamPlayers = props.playerData
+    .filter((player) => player.team === props.teamColor)
+    .slice(props.startPlayers, props.endPlayers);
+  const spacing = props.isDeathmatch ? 1 : 2;
   return (
     <Grid md={6} disableEqualOverflow>
-      <Stack spacing={2}>
-        {redPlayers.map((player) => (
-          <React.Fragment>
+      <Stack spacing={spacing}>
+        {teamPlayers.map((player) => (
+          <React.Fragment key={player.subjectId}>
             <Grid display="flex" justifyContent="center" alignItems="center">
               <PlayerCard
                 agentID={player.characterId}
@@ -37,6 +41,7 @@ const RedTeam = (props: Props) => {
                 accountLvl={player.accountLvl}
                 queue={player.queueId}
                 preGame={props.preGame}
+                rank={player.rank}
               />
             </Grid>
             <PrimaryDivider />
@@ -47,4 +52,4 @@ const RedTeam = (props: Props) => {
   );
 };
 
-export default RedTeam;
+export default Team;

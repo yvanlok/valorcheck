@@ -1,6 +1,6 @@
 {
   "name": "valor-check",
-  "version": "1.0.1-alpha",
+  "version": "1.0.1-beta",
   "private": true,
   "description": "Lightweight, modern boilerplate built with electron, typescript, and react.",
   "main": "./dist/main.js",
@@ -70,7 +70,14 @@
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "yvanlok",
+        "repo": "valorcheck"
+      }
+    ]
   },
   "engines": {
     "npm": ">=7.0.0",
