@@ -19,6 +19,20 @@
 <img src="https://img.shields.io/github/issues-pr/yvanlok/valorcheck?style=flat-square" alt="pull-requests"/>
 </a>
 
+## How To
+
+1. Install the latest version from the [releases](https://github.com/yvanlok/valorcheck/releases)
+2. Run the installer
+3. Launch the application while having Valorant open
+4. Catch smurfs and boosted players!
+
+## Tech Stack
+- [Electron.js](https://www.electronjs.org/)
+- [React](https://react.dev/)
+- [MUI](https://mui.com/)
+- [Typescript](https://www.typescriptlang.org/)
+- Quickstart [here](https://github.com/hellosoftware-io/electron-typescript-react-mui)
+   
 ## Features
 - Rank checker
 - K/D
@@ -26,13 +40,6 @@
 - Top Played Agent
 - Player Card
 - Link to [tracker.gg](https://tracker.gg/valorant) profile for more in-depth stats
-
-## HOW TO RUN
-
-1. Install the latest version from the [releases](https://github.com/yvanlok/valorcheck/releases)
-2. Run the installer
-3. Launch the application while having Valorant open
-4. Catch smurfs and boosted players!
 
 ## Features coming soon
 - Party viewer
@@ -52,16 +59,17 @@
 
 
 ## Credits
-1. [WAIUA](https://github.com/Soneliem/WAIUA) by Soneliem
-  a) Many features come from WAIUA
+1. [WAIUA](https://github.com/Soneliem/WAIUA) by Soneliem <br>
+  a) Many features come from WAIUA  <br>
   b) Inspiration and motivation came from the deprecation of the project
-2. [VALTracker](https://valtracker.gg) by [Spirit](https://github.com/codedotspirit)
-  a) Suggesting me to use Electron (I was going to use C++)
-  b) Helping me out with my first [Electron.js](https://www.electronjs.org/) project.
+2. [VALTracker](https://valtracker.gg) by [Spirit](https://github.com/codedotspirit) <br>
+  a) Suggesting me to use Electron (I was going to use C++) <br>
+  b) Helping me out with my first [Electron.js](https://www.electronjs.org/) project. 
 3. [Henrik's Unoffical Valorant API](https://github.com/Henrik-3/unofficial-valorant-api)  although I didn't end up using this API, his community in his Discord [server](https://discord.gg/sWzkPtJkDg) helped massively with their knowledge on the in-game API.
-4. The documentation for the Valorant API made by [techchrism](https://github.com/techchrism)
-   a) This project would not have been possible without the excellent documentation of all the endpoints
+4. The documentation for the Valorant API made by [techchrism](https://github.com/techchrism) <br>
+   a) This project would not have been possible without the excellent documentation of all the endpoints  <br>
    b) You can find the docs [here](https://valapidocs.techchrism.me/)
+5. [Boilerplate](https://github.com/hellosoftware-io/electron-typescript-react-mui)
 
 ## Contributing
 
