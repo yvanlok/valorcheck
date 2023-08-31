@@ -1,6 +1,23 @@
 # ValorCheck
 
-Introducing ValorCheck! The open-source, privacy-friendly alternative to apps such as Blitz.gg, Valorant Tracker and Strats.gg.
+<h2>Introducing ValorCheck! The open-source, privacy-friendly alternative to apps such as Blitz.gg, Valorant Tracker and Strats.gg.</h2>
+
+<p align="center">
+<a href="https://github.com/yvanlok/valorcheck/blob/main/LICENSE" target="_blank">
+<img src="https://img.shields.io/github/license/yvanlok/valorcheck?style=flat-square" alt="licence" />
+</a>
+<a href="https://github.com/yvanlok/valorcheck/fork" target="_blank">
+<img src="https://img.shields.io/github/forks/yvanlok/valorcheck?style=flat-square" alt="forks"/>
+</a>
+<a href="https://github.com/yvanlok/valorcheck/stargazers" target="_blank">
+<img src="https://img.shields.io/github/stars/yvanlok/valorcheck?style=flat-square" alt="stars"/>
+</a>
+<a href="https://github.com/yvanlok/valorcheck/issues" target="_blank">
+<img src="https://img.shields.io/github/issues/yvanlok/valorcheck?style=flat-square" alt="issues"/>
+</a>
+<a href="https://github.com/yvanlok/valorcheck/pulls" target="_blank">
+<img src="https://img.shields.io/github/issues-pr/yvanlok/valorcheck?style=flat-square" alt="pull-requests"/>
+</a>
 
 ## Features
 - Rank checker
@@ -49,6 +66,15 @@ Introducing ValorCheck! The open-source, privacy-friendly alternative to apps su
 ## Contributing
 
 Pull requests are always welcome 😃.
+
+## ⭐️ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yvanlok/valorcheck&type=Date)](https://github.com/yvanlok/valorcheck/stargazers)
+
+<h3>
+A ⭐️ to ValorCheck is a ⭐️ to the brilliant open-source community of developers
+</h3>
+
 
 ## License
 
