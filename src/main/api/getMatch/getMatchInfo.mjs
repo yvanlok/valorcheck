@@ -1,0 +1,72 @@
+import fetch from "node-fetch";
+import fetchToken from "../riotAuth.mjs";
+import { fetchShard } from "../basicHelpers.mjs";
+import { fetchRegion } from "../basicHelpers.mjs";
+import { fetchMatchID, fetchPreMatchID } from "./getMatchID.mjs";
+// Fetches the shard information
+export async function fetchPreMatch() {
+  try {
+    const { token, entitlement } = await fetchToken();
+
+    const shard = await fetchShard();
+    const region = await fetchRegion();
+    const matchID = await fetchPreMatchID();
+
+    if (matchID === undefined) {
+    }
+
+    const url = `https://glz-${region}-1.${shard}.a.pvp.net/core-game/v1/matches/${matchID}`;
+
+    const headers = {
+      "X-Riot-Entitlements-JWT": entitlement,
+      Authorization: `Bearer ${token}`,
+    };
+    const options = {
+      method: "GET",
+      headers,
+    };
+
+    const response = await fetch(url, options);
+    const responseData = await response.json();
+
+    return responseData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchMatch() {
+  try {
+    const { token, entitlement } = await fetchToken();
+
+    const shard = await fetchShard();
+    const region = await fetchRegion();
+    const matchID = await fetchMatchID();
+
+    if (matchID === undefined) {
+    }
+
+    const url = `https://glz-${region}-1.${shard}.a.pvp.net/core-game/v1/matches/${matchID}`;
+
+    const headers = {
+      "X-Riot-Entitlements-JWT": entitlement,
+      Authorization: `Bearer ${token}`,
+    };
+    const options = {
+      method: "GET",
+      headers,
+    };
+
+    const response = await fetch(url, options);
+    const responseData = await response.json();
+
+    return responseData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchMatchMode() {
+  const responseData = await fetchMatch();
+  return response
+}

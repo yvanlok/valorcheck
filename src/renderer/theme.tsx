@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+// import Winston-SemiBold from "../../../static/fonts/Winston-SemiBold.ttf"
 
 // Create a Material-UI theme instance
 // https://mui.com/customization/theming/
@@ -25,6 +26,7 @@ const theme = createTheme({
     body1: {
       color: "#9EEAF9",
     },
+    // fontFamily: "Winston-SemiBold, Roboto",
   },
 });
 

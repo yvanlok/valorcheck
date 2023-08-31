@@ -1,5 +1,5 @@
 {
-  "name": "electron-typescript-react-mui",
+  "name": "valor-check",
   "version": "1.0.0",
   "private": true,
   "description": "Lightweight, modern boilerplate built with electron, typescript, and react.",
@@ -10,20 +10,21 @@
     "dev:react": "cross-env NODE_ENV=development webpack serve --config webpack/react.webpack.ts --mode=development",
     "electron:serve": "wait-on http-get://localhost:4000/ && npm run dev:electron",
     "start:electron": "electron .",
-    "build": "npm-run-all build:electron build:react",
-    "build:run": "npm-run-all build start:electron",
-    "build:electron": "webpack --config webpack/electron.webpack.ts --mode=production",
-    "build:react": "webpack --config webpack/react.webpack.ts --mode=production",
-    "package": "npm-run-all build package:dist",
-    "package:dist": "electron-builder --dir"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "install-app-deps"
   },
   "keywords": [],
-  "author": "HelloSoftware",
+  "author": "Yvan Lokhmotov",
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/material": "^5.9.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@liamcottle/valorant.js": "^1.5.1",
+    "@mui/icons-material": "^5.14.6",
+    "@mui/material": "^5.14.6",
+    "jsonwebtoken": "^9.0.1",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -35,8 +36,8 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "cross-env": "^7.0.3",
-    "electron": "^19.0.8",
-    "electron-builder": "^23.3.2",
+    "electron": "^19.1.9",
+    "electron-builder": "^23.6.0",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.30.1",
@@ -52,18 +53,19 @@
     "webpack-dev-server": "^4.9.3"
   },
   "build": {
-    "appId": "com.company.app",
-    "productName": "App Name",
-    "mac": {
-      "category": "public.app-category.video"
-    },
+    "appId": "",
+    "productName": "ValorCheck",
     "directories": {
       "output": "packages"
     },
     "files": [
       "package.json",
       "dist/**"
-    ]
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    }
   },
   "engines": {
     "npm": ">=7.0.0",

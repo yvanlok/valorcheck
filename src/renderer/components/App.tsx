@@ -1,7 +1,8 @@
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, Divider } from "@mui/material";
 import React from "react";
 import theme from "../theme";
-import Greetings from "./Greetings";
+import PlayerGrid from "./PlayerGrid";
+import Navbar from "./Navbar";
 
 export default function App(): JSX.Element {
   return (
@@ -9,16 +10,19 @@ export default function App(): JSX.Element {
     // https://mui.com/customization/theming/
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          backgroundColor: (theme) => theme.palette.background.default,
-        }}
-      >
-        <main>
-          {/* This is where your app content should go */}
-          <Greetings />
-        </main>
-      </Box>
+      <main>
+        {/* List of players */}
+        <Navbar />
+        {/* Customize the Divider */}
+        <Divider
+          variant="middle"
+          sx={{
+            marginBottom: 2,
+            borderColor: theme.palette.primary.main, // Change color to match your design
+          }}
+        />
+        <PlayerGrid />
+      </main>
     </ThemeProvider>
   );
 }
