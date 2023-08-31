@@ -12,7 +12,9 @@
     "start:electron": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "postinstall": "install-app-deps"
+    "postinstall": "install-app-deps",
+    "release": "electron-builder"
+
   },
   "keywords": [],
   "author": "Yvan Lokhmotov",
