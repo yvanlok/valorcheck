@@ -10,11 +10,16 @@
     "dev:react": "cross-env NODE_ENV=development webpack serve --config webpack/react.webpack.ts --mode=development",
     "electron:serve": "wait-on http-get://localhost:4000/ && npm run dev:electron",
     "start:electron": "electron .",
+    "build": "npm-run-all build:electron build:react",
+    "build:run": "npm-run-all build start:electron",
+    "build:electron": "webpack --config webpack/electron.webpack.ts --mode=production",
+    "build:react": "webpack --config webpack/react.webpack.ts --mode=production",
+    "package": "npm-run-all build package:dist",
+    "package:dist": "electron-builder --dir",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "install-app-deps",
     "release": "electron-builder"
-
   },
   "keywords": [],
   "author": "Yvan Lokhmotov",
@@ -22,7 +27,6 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@liamcottle/valorant.js": "^1.5.1",
     "@mui/icons-material": "^5.14.6",
     "@mui/material": "^5.14.6",
     "jsonwebtoken": "^9.0.1",
@@ -55,7 +59,6 @@
     "webpack-dev-server": "^4.9.3"
   },
   "build": {
-    "appId": "",
     "productName": "ValorCheck",
     "directories": {
       "output": "packages"
