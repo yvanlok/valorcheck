@@ -19,6 +19,7 @@ import Link from "@mui/material/Link";
 function Navbar() {
   const [mapImage, setMapImage] = useState("");
   const [mapDisplayName, setMapDisplayName] = useState("");
+
   useEffect(() => {
     const interval = setInterval(async () => {
       const mapId = await fetchMap();
@@ -29,6 +30,31 @@ function Navbar() {
 
     return () => clearInterval(interval);
   }, []);
+
+  const [lastRefresh, setLastRefresh] = useState(() => {
+    const localStorageValue = localStorage.getItem("lastRefresh");
+    return parseInt(localStorageValue ?? "0", 10);
+  });
+
+  const handleRefreshClick = () => {
+    // Get the current time
+    const currentTime = Date.now();
+
+    // Check if at least 1 minute has passed since the previous refresh
+    if (currentTime - lastRefresh >= 30000) {
+      // Set the last refresh time to the current time
+      setLastRefresh(currentTime);
+      localStorage.setItem("lastRefresh", currentTime.toString());
+
+      // Refresh the page
+      window.location.reload();
+    } else {
+      // Display an error message or notification
+      alert(
+        "You tried to refresh too soon. This can cause problems with displaying statistics and ranks. Try again later in 30 seconds."
+      );
+    }
+  };
 
   return (
     <AppBar position="static" color="transparent" elevation={0}>
@@ -72,7 +98,6 @@ function Navbar() {
               </Link>
             </Box>
 
-            {/* Centered Box */}
             <Box
               sx={{
                 display: "flex",
@@ -82,7 +107,7 @@ function Navbar() {
                 backgroundSize: "contain",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                width: "30%", // set a fixed width for the box
+                width: "30%",
               }}
             >
               <Typography
@@ -97,7 +122,6 @@ function Navbar() {
               </Typography>
             </Box>
 
-            {/* Icons */}
             <Box
               sx={{
                 display: "flex",
@@ -110,7 +134,7 @@ function Navbar() {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Refresh page">
-                <IconButton sx={{ p: 0 }}>
+                <IconButton sx={{ p: 0 }} onClick={handleRefreshClick}>
                   <RefreshIcon />
                 </IconButton>
               </Tooltip>

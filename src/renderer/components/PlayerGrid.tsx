@@ -58,9 +58,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
     const checkForMatch = async () => {
       if (isGameRunning) {
         const match = await fetchMatchID();
-        console.log("Match id: " + match);
         const preMatch = await fetchPreMatchID();
-        console.log("Prematch id: " + preMatch);
         if (match !== undefined) {
           setMatch(true);
           setPreMatch(false);
@@ -81,22 +79,20 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
   useEffect(() => {
     const fetchPlayerData = async () => {
       setPuuid(await fetchPuuid());
-      let playerData: PlayerData[] = []; // declare with empty array instead of undefined
+      let playerData: PlayerData[] = [];
       if (preMatch) {
         const data = await fetchPreMatch();
-        console.log(data);
-        playerData = (data as Record<string, any>).Teams.Players.map(
+        playerData = (data as Record<string, any>).AllyTeam.Players.map(
           (player: Record<string, any>) => ({
             subjectId: player.Subject,
             characterId: null,
-            team: player.TeamID,
+            team: (data as Record<string, any>).AllyTeam.TeamID,
             accountLvl: player.PlayerIdentity.AccountLevel,
             playerCardId: player.PlayerIdentity.PlayerCardID,
             queueId: (data as Record<string, any>).QueueID,
             rank: player.CompetitiveTier,
           })
         );
-        console.log(playerData);
       } else if (match) {
         const data = await fetchMatch();
         playerData = (data as Record<string, any>).Players.map(
