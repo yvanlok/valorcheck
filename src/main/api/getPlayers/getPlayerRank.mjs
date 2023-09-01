@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import fetchToken from "../riotAuth.mjs";
 import { fetchCurrentSeason, fetchShard } from "../basicHelpers.mjs";
 import { fetchClientVersion } from "../basicHelpers.mjs";
+import { fetchRegion } from "../basicHelpers.mjs";
 
 // Fetches the shard information
 export async function fetchPlayerMMR(puuid) {
@@ -40,26 +41,43 @@ export async function fetchCurrentRank(puuid) {
   if (currentSeasonMMR) {
     return currentSeasonMMR.CompetitiveTier;
   } else {
-    return "0";
+    return 0;
   }
 }
 
 export async function fetchPeakRank(puuid) {
-  const responseData = await fetchPlayerMMR(puuid);
-  const seasons = Object.keys(responseData);
+  try {
+    const responseData = await fetchPlayerMMR(puuid);
+    const seasons = Object.keys(responseData);
 
-  let peakRank = 0;
+    let peakRank = 0;
 
-  for (const season of seasons) {
-    const seasonMMR = responseData[season];
-    if (
-      seasonMMR &&
-      seasonMMR.CompetitiveTier &&
-      seasonMMR.CompetitiveTier > peakRank
-    ) {
-      peakRank = seasonMMR.CompetitiveTier;
+    for (const season of seasons) {
+      const seasonMMR = responseData[season];
+      if (
+        seasonMMR &&
+        seasonMMR.CompetitiveTier &&
+        seasonMMR.CompetitiveTier > peakRank
+      ) {
+        peakRank = seasonMMR.CompetitiveTier;
+      }
     }
-  }
 
-  return peakRank.toString();
+    return peakRank;
+  } catch {
+    return 0;
+  }
+}
+
+export async function fetchRankHenrik(puuid) {
+  const region = await fetchRegion();
+  const response = await fetch(
+    `https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/${region}/${puuid}`
+  );
+  const responseData = await response.json();
+
+  return {
+    currentRank: responseData.data.current_data.currenttier,
+    peakRank: responseData.data.highest_rank.tier,
+  };
 }

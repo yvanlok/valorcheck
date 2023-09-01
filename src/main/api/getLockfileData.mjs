@@ -12,6 +12,6 @@ export default async function getLockfileData() {
 
     return { lockfilePassword, lockfilePort };
   } catch (error) {
-    return null;
+    return undefined;
   }
 }

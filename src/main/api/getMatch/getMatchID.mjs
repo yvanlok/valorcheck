@@ -29,7 +29,7 @@ export async function fetchPreMatchID() {
 
     return responseData.MatchID;
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }
 
@@ -57,6 +57,6 @@ export async function fetchMatchID() {
 
     return responseData.MatchID;
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }

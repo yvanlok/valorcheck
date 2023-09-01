@@ -23,7 +23,7 @@ export async function fetchMatches(puuid) {
     const matchIds = responseData.History.map((match) => match.MatchID);
     return matchIds;
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }
 
@@ -47,7 +47,7 @@ export async function fetchMatch(matchID) {
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }
 

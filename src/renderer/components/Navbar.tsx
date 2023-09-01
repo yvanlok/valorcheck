@@ -14,6 +14,7 @@ import {
 } from "../../main/api/getAssets/getMapAssets.mjs";
 import { fetchMap } from "../../main/api/getMatch/getMatchInfo.mjs";
 import { handleClick } from "../../main/helpers";
+import Link from "@mui/material/Link";
 
 function Navbar() {
   const [mapImage, setMapImage] = useState("");
@@ -37,64 +38,83 @@ function Navbar() {
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
-            <a
-              href="https://github.com/yvanlok/valorcheck"
-              onClick={(e) =>
-                handleClick(e, "https://github.com/yvanlok/valorcheck")
-              }
-            >
-              <img src="https://svgshare.com/i/x9q.svg"></img>
-            </a>
-            <Typography
-              variant="subtitle1"
-              component="div"
+            {/* Brand Name */}
+            <Box
               sx={{
-                flexGrow: 1,
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: 20,
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              ValorCheck
-            </Typography>
-          </Box>
+              <Link
+                href="https://github.com/yvanlok/valorcheck"
+                onClick={(e) =>
+                  handleClick(e, "https://github.com/yvanlok/valorcheck")
+                }
+                underline="hover"
+              >
+                <Typography
+                  variant="subtitle1"
+                  component="div"
+                  sx={{
+                    fontFamily: "Roboto",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                    flexGrow: 1,
+                  }}
+                >
+                  ValorCheck
+                </Typography>
+              </Link>
+            </Box>
 
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
+            {/* Centered Box */}
+            <Box
               sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: 20,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundImage: `url(${mapImage})`,
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                width: "30%", // set a fixed width for the box
               }}
             >
-              {mapDisplayName}
-            </Typography>
-          </Box>
-          <Box>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <SettingsIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          <Box>
-            <Tooltip title="Refresh page">
-              <IconButton sx={{ p: 0 }}>
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
+              <Typography
+                sx={{
+                  fontFamily: "Roboto",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                {mapDisplayName}
+              </Typography>
+            </Box>
+
+            {/* Icons */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Tooltip title="Open settings">
+                <IconButton sx={{ p: 0 }}>
+                  <SettingsIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Refresh page">
+                <IconButton sx={{ p: 0 }}>
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Box>
         </Toolbar>
       </Container>

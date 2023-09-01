@@ -15,7 +15,11 @@ import {
 } from "../../main/api/getAssets/getRankAssets.mjs";
 
 import { getAccount } from "../../main/api/getPlayers/getPlayerData.mjs";
-import { fetchCurrentRank } from "../../main/api/getPlayers/getPlayerRank.mjs";
+import {
+  fetchCurrentRank,
+  fetchPeakRank,
+  fetchRankHenrik,
+} from "../../main/api/getPlayers/getPlayerRank.mjs";
 import {
   getAgentImage,
   getAgentDisplayName,
@@ -75,11 +79,14 @@ const PlayerCard = (props: Props) => {
   } = props;
   const [rankSrc, setRankSrc] = useState("");
   const [rankName, setRankName] = useState("");
+  const [peakRankSrc, setPeakRankSrc] = useState("");
+  const [peakRankName, setPeakRankName] = useState("");
   const [playerCard, setPlayerCard] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [accountLevel, setAccountLevel] = useState<number>();
   const [puuid, setPuuid] = useState(playerID);
   const [rankTier, setRankTier] = useState(rank);
+  const [peakRankTier, setPeakRankTier] = useState<number>();
   const [agentSrc, setAgentSrc] = useState("");
   const [agentName, setAgentName] = useState("");
   const [agentUUID, setAgentUUID] = useState(agentID);
@@ -99,9 +106,6 @@ const PlayerCard = (props: Props) => {
 
   useEffect(() => {
     const fetchAccountDetails = async () => {
-      // Set the initial value of `rank` to `undefined`
-      let rank: number | undefined = undefined;
-
       if (isPlayer) {
         const response = await getAccount(puuid);
         const accountResponse = response as AccountResponse;
@@ -119,7 +123,12 @@ const PlayerCard = (props: Props) => {
         setPlayerCard(await getCardImage(playerCardId));
       }
       if (rankTier === 0 || rank === undefined) {
-        setRankTier(await fetchCurrentRank(puuid));
+        const response = await fetchRankHenrik(puuid);
+
+        setRankTier(response === null ? 0 : response.currentRank);
+        setPeakRankTier(response.peakRank);
+      } else {
+        setPeakRankTier(await fetchPeakRank(puuid));
       }
       setPlayerTracker(await fetchTracker(puuid));
     };
@@ -130,14 +139,17 @@ const PlayerCard = (props: Props) => {
     const fetchRankAssets = async () => {
       setRankSrc(await getRankImage(rankTier));
       setRankName(await getRankName(rankTier));
+
+      setPeakRankSrc(await getRankImage(peakRankTier));
+      setPeakRankName(await getRankName(peakRankTier));
     };
 
     fetchRankAssets();
-  }, [rankTier]);
+  }, [rankTier, peakRankTier]);
 
   useEffect(() => {
     const fetchAgentAssets = async () => {
-      if (preGame) {
+      if (preGame || isPlayer) {
         await setAgentUUID(await fetchTopPlayedAgent(matchData));
       }
       setAgentSrc(await getAgentImage(agentUUID));
@@ -149,7 +161,8 @@ const PlayerCard = (props: Props) => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      setPlayerKD(await fetchKD(matchData));
+      const KD = await fetchKD(matchData);
+      setPlayerKD(Number.isNaN(KD) ? 0 : KD);
       setPlayerWinPercentage(await fetchWinPercent(puuid));
     };
     fetchStats();
@@ -167,13 +180,13 @@ const PlayerCard = (props: Props) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Card variant="outlined">
+      <Card sx={{ borderBottom: 2, borderColor: theme.palette.primary.main }}>
         <Box
           sx={{
-            width: "50vw",
-            height: "13vh",
+            width: queue === "deathmatch" ? "50vw" : "50vw",
+            height: queue === "deathmatch" ? "14vh" : "16.5vh",
             backgroundImage: `url(${playerCard})`,
-            backgroundSize: "cover",
+            backgroundSize: "100% 100%", // set backgroundSize to stretch the image to fill the Box
             backgroundPosition: "center",
             position: "relative",
           }}
@@ -185,18 +198,25 @@ const PlayerCard = (props: Props) => {
                 bottom: 0,
                 left: 0,
                 backgroundColor: theme.palette.primary.main,
-                borderRadius: "0 100% 0 0",
+                borderRadius: "1",
                 width: "5%",
-                height: "-5%",
+              }}
+              style={{
+                padding: "0.01rem 1rem",
+                borderTopRightRadius: "6px",
               }}
             >
               <Typography
                 sx={{
-                  marginBottom: -0.5,
-                  marginLeft: 0.1,
+                  display: "flex",
+                  justifyContent: "center",
                   fontFamily: "Roboto",
                   fontWeight: "bold",
-                  fontSize: "17",
+                  fontSize:
+                    accountLevel && accountLevel.toString().length > 2
+                      ? "16px"
+                      : "20px",
+                  color: "#9575CD",
                 }}
                 style={{ color: "#9575CD" }}
               >
@@ -214,14 +234,19 @@ const PlayerCard = (props: Props) => {
               padding: "0 1rem",
             }}
           >
-            <Tooltip title={preGame ? `Top played: ${agentName}` : agentName}>
+            <Tooltip
+              title={
+                preGame || isPlayer ? `Top played: ${agentName}` : agentName
+              }
+            >
               <Box
                 sx={{
                   backgroundImage: `url(${agentSrc})`,
-                  backgroundSize: "cover",
+                  backgroundSize: "80%",
                   backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat", // Prevent repeating the image
                   width: "20%",
-                  height: "80%",
+                  height: "100%",
                 }}
               ></Box>
             </Tooltip>
@@ -245,13 +270,17 @@ const PlayerCard = (props: Props) => {
                   }}
                   style={{ color: "#9575CD" }}
                 >
-                  <Link
-                    color="inherit"
-                    href={playerTracker}
-                    onClick={(e) => handleClick(e, playerTracker)}
-                  >
-                    {playerName}
-                  </Link>
+                  {playerTracker !== "" ? (
+                    <Link
+                      color="inherit"
+                      href={playerTracker}
+                      onClick={(e) => handleClick(e, playerTracker)}
+                    >
+                      {playerName}
+                    </Link>
+                  ) : (
+                    playerName
+                  )}
                 </Typography>
               </Box>
 
@@ -260,7 +289,7 @@ const PlayerCard = (props: Props) => {
                   display: "flex",
                   justifyContent: "center",
                   position: "absolute",
-                  bottom: "10%",
+                  bottom: "5%",
                   left: 0,
                   width: "100%",
                 }}
@@ -270,8 +299,8 @@ const PlayerCard = (props: Props) => {
                     sx={{
                       backgroundColor: theme.palette.primary.main,
                       borderRadius: "50%",
-                      width: "30px",
-                      height: "30px",
+                      width: "35px",
+                      height: "35px",
                       marginRight: "5px",
                       display: "flex",
                       justifyContent: "center",
@@ -290,13 +319,13 @@ const PlayerCard = (props: Props) => {
                     </Typography>
                   </Box>
                 </Tooltip>
-                <Tooltip title="Player's Win %" arrow placement="right">
+                <Tooltip title="Player's Win %" arrow placement="bottom">
                   <Box
                     sx={{
                       backgroundColor: theme.palette.primary.main,
                       borderRadius: "50%",
-                      width: "30px",
-                      height: "30px",
+                      width: "35px",
+                      height: "35px",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -314,16 +343,37 @@ const PlayerCard = (props: Props) => {
                     </Typography>
                   </Box>
                 </Tooltip>
+                <Tooltip
+                  title={`Player's Peak Rank: ${peakRankName}`}
+                  arrow
+                  placement="right"
+                >
+                  <Box
+                    sx={{
+                      backgroundImage: `url(${peakRankSrc})`,
+                      minHeight: "35px", // Set a minimum height for the box
+
+                      minWidth: "35px",
+                      height: "120%",
+                      display: "flex",
+                      marginLeft: "5px",
+                      backgroundSize: "110%",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat", // Prevent repeating the image
+                    }}
+                  ></Box>
+                </Tooltip>
               </Box>
             </Box>
             <Tooltip title={rankName}>
               <Box
                 sx={{
                   backgroundImage: `url(${rankSrc})`,
-                  backgroundSize: "cover",
+                  backgroundSize: "80%",
                   backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat", // Prevent repeating the image
                   width: "20%",
-                  height: "80%",
+                  height: "100%",
                 }}
               ></Box>
             </Tooltip>

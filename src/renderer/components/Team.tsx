@@ -27,10 +27,9 @@ const Team = (props: Props) => {
   const teamPlayers = props.playerData
     .filter((player) => player.team === props.teamColor)
     .slice(props.startPlayers, props.endPlayers);
-  const spacing = props.isDeathmatch ? 1 : 2;
   return (
     <Grid md={6} disableEqualOverflow>
-      <Stack spacing={spacing}>
+      <Stack spacing={1}>
         {teamPlayers.map((player) => (
           <React.Fragment key={player.subjectId}>
             <Grid display="flex" justifyContent="center" alignItems="center">
@@ -44,7 +43,6 @@ const Team = (props: Props) => {
                 rank={player.rank}
               />
             </Grid>
-            <PrimaryDivider />
           </React.Fragment>
         ))}
       </Stack>

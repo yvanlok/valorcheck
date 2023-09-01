@@ -1,6 +1,6 @@
 {
   "name": "valor-check",
-  "version": "1.0.1-beta",
+  "version": "1.0.2-beta",
   "private": true,
   "description": "Lightweight, modern boilerplate built with electron, typescript, and react.",
   "main": "./dist/main.js",
@@ -19,7 +19,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "install-app-deps",
-    "release": "electron-builder"
+    "release": "electron-builder",
+    "publish": "electron-builder -p "
   },
   "keywords": [],
   "author": "Yvan Lokhmotov",
@@ -29,6 +30,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.6",
     "@mui/material": "^5.14.6",
+    "electron-updater": "^6.1.1",
     "jsonwebtoken": "^9.0.1",
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",

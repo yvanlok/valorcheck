@@ -16,7 +16,7 @@ import PlayerCard from "./PlayerCard";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
-import { fetchPuuid } from "../../main/api/basicHelpers.mjs";
+import { fetchPuuid, fetchRegion } from "../../main/api/basicHelpers.mjs";
 import Team from "./Team";
 
 type Props = {};
@@ -32,6 +32,7 @@ interface PlayerData {
 }
 
 const PlayerGrid: React.FC<Props> = (props: Props) => {
+  const [isClientRunning, setIsClientRunning] = useState<boolean>(false);
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
   const [match, setMatch] = useState<boolean>(false);
   const [preMatch, setPreMatch] = useState<boolean>(false);
@@ -41,12 +42,10 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     const checkForLockfile = async () => {
-      const response = await getLockfileData();
-      if (response) {
-        setIsGameRunning(true);
-      } else {
-        setIsGameRunning(false);
-      }
+      const lockfile = await getLockfileData();
+      const checkGame = await fetchPuuid();
+      setIsClientRunning(lockfile !== undefined ? true : false);
+      setIsGameRunning(checkGame !== undefined ? true : false);
     };
     const intervalId = setInterval(checkForLockfile, 500);
 
@@ -59,17 +58,20 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
     const checkForMatch = async () => {
       if (isGameRunning) {
         const match = await fetchMatchID();
+        console.log("Match id: " + match);
         const preMatch = await fetchPreMatchID();
+        console.log("Prematch id: " + preMatch);
         if (match !== undefined) {
           setMatch(true);
           setPreMatch(false);
-        } else if (preMatch !== undefined) {
+        }
+        if (preMatch !== undefined) {
           setPreMatch(true);
           setMatch(false);
         }
       }
     };
-    const intervalId = setInterval(checkForMatch, 1000);
+    const intervalId = setInterval(checkForMatch, 3000);
 
     return () => {
       clearInterval(intervalId);
@@ -82,6 +84,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       let playerData: PlayerData[] = []; // declare with empty array instead of undefined
       if (preMatch) {
         const data = await fetchPreMatch();
+        console.log(data);
         playerData = (data as Record<string, any>).Teams.Players.map(
           (player: Record<string, any>) => ({
             subjectId: player.Subject,
@@ -93,6 +96,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
             rank: player.CompetitiveTier,
           })
         );
+        console.log(playerData);
       } else if (match) {
         const data = await fetchMatch();
         playerData = (data as Record<string, any>).Players.map(
@@ -126,66 +130,27 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      {match ? (
-        <>
-          {isDeathmatch ? (
-            <Grid container spacing={0.5}>
-              <Team
-                playerData={matchData}
-                teamColor="Blue"
-                startPlayers={0}
-                endPlayers={6}
-                isDeathmatch={true}
-              />
-              <Team
-                playerData={matchData}
-                teamColor="Blue"
-                startPlayers={6}
-                endPlayers={12}
-                isDeathmatch={true}
-              />
-            </Grid>
-          ) : (
-            <Grid container spacing={0.5}>
-              <Team
-                playerData={matchData}
-                teamColor="Blue"
-                startPlayers={0}
-                endPlayers={5}
-                isDeathmatch={false}
-              />
-              <Team
-                playerData={matchData}
-                teamColor="Red"
-                startPlayers={0}
-                endPlayers={5}
-                isDeathmatch={false}
-              />
-            </Grid>
-          )}
-        </>
-      ) : null}
-
-      {preMatch ? (
+      {preMatch || match ? (
         <Grid container spacing={0.5}>
           <Team
             playerData={matchData}
             teamColor="Blue"
             startPlayers={0}
-            endPlayers={5}
-            isDeathmatch={false}
-            preGame={true}
+            endPlayers={isDeathmatch ? 6 : 5}
+            isDeathmatch={isDeathmatch}
+            preGame={preMatch}
           />
           <Team
             playerData={matchData}
-            teamColor="Red"
-            startPlayers={0}
-            endPlayers={5}
-            isDeathmatch={false}
-            preGame={true}
+            teamColor={isDeathmatch ? "Blue" : "Red"}
+            startPlayers={isDeathmatch ? 6 : 0}
+            endPlayers={isDeathmatch ? 12 : 5}
+            isDeathmatch={isDeathmatch}
+            preGame={preMatch}
           />
         </Grid>
       ) : null}
+
       {isGameRunning && !preMatch && !match ? (
         <Stack spacing={10} justifyContent="center" alignItems="center">
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -198,6 +163,18 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
               }}
             >
               Valorant running
+            </Typography>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <CheckIcon style={{ marginRight: "8px", color: "green" }} />
+            <Typography
+              sx={{
+                fontFamily: "Roboto",
+                textAlign: "center",
+                fontSize: "20",
+              }}
+            >
+              Client running
             </Typography>
           </div>
 
@@ -219,7 +196,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
         </Stack>
       ) : null}
 
-      {!isGameRunning ? (
+      {!isClientRunning && !isGameRunning ? (
         <Stack spacing={10} justifyContent="center" alignItems="center">
           <div style={{ display: "flex", alignItems: "center" }}>
             <CloseIcon style={{ marginRight: "8px", color: "red" }} />
@@ -230,7 +207,47 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
                 fontSize: "20",
               }}
             >
-              Valorant running
+              Client running
+            </Typography>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
+            <Typography
+              sx={{
+                fontFamily: "Roboto",
+                textAlign: "center",
+                fontSize: "20",
+              }}
+            >
+              Game running
+            </Typography>
+          </div>
+        </Stack>
+      ) : null}
+      {isClientRunning && !isGameRunning ? (
+        <Stack spacing={10} justifyContent="center" alignItems="center">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <CheckIcon style={{ marginRight: "8px", color: "green" }} />
+            <Typography
+              sx={{
+                fontFamily: "Roboto",
+                textAlign: "center",
+                fontSize: "20",
+              }}
+            >
+              Client running
+            </Typography>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
+            <Typography
+              sx={{
+                fontFamily: "Roboto",
+                textAlign: "center",
+                fontSize: "20",
+              }}
+            >
+              Game running
             </Typography>
           </div>
         </Stack>

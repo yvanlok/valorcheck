@@ -25,7 +25,6 @@ export default async function fetchToken() {
 
     return { token, entitlement };
   } catch (error) {
-    console.error("Error:", error);
     return null;
   }
 }

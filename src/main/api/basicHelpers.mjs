@@ -128,7 +128,7 @@ export async function fetchPuuid() {
 
     return puuid;
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }
 
@@ -156,7 +156,7 @@ export async function fetchCurrentSeason() {
     return activeSeasonId;
   } else {
     // Return a default value or handle the case when no active season is found
-    return null;
+    return undefined;
   }
 }
 
@@ -187,6 +187,6 @@ export async function getNameTagFromPuuid(puuid) {
 
     return { name, tag };
   } catch (error) {
-    console.error(error);
+    return undefined;
   }
 }
