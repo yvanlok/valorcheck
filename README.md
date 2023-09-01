@@ -34,7 +34,7 @@
 - Quickstart [here](https://github.com/hellosoftware-io/electron-typescript-react-mui)
    
 ## Features
-- Rank checker
+- Rank checker (including peak rank)
 - K/D
 - Win Percentage
 - Top Played Agent
@@ -44,18 +44,19 @@
 ## Features coming soon
 - Party viewer
 - Skins viewer
-- Peak Rank
-- Auto update
+- Peak Rank | DONE
+- Auto update | DONE
 - Settings Menu
   - Change number of games for stats
   - Change viewable stats
   - *Optional* analytics
-- Better support on different screens
+- Better support on different screens | PARTLY DONE
 
 ## Known issues (OPEN ISSUES IF FOUND)
 - Detects the game as running when the Riot client is open
 - Looks ugly on different resolutions/screens
 - Lots of errors in the debug console
+- Pregame doesn't work properly yet
 
 
 ## Credits
