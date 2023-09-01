@@ -1,6 +1,6 @@
 {
   "name": "valor-check",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "Lightweight, modern boilerplate built with electron, typescript, and react.",
   "main": "./dist/main.js",
@@ -61,6 +61,7 @@
     "webpack-dev-server": "^4.9.3"
   },
   "build": {
+    "appId": "com.electron.ValorCheck",
     "productName": "ValorCheck",
     "directories": {
       "output": "packages"
