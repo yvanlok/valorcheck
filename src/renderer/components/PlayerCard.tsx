@@ -359,7 +359,7 @@ const PlayerCard = (props: Props) => {
                       height: "120%",
                       display: "flex",
                       marginLeft: "5px",
-                      backgroundSize: "110%",
+                      backgroundSize: "100%",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat", // Prevent repeating the image
                     }}

@@ -12,20 +12,25 @@ import {
   fetchMapDisplayName,
   fetchMapImage,
 } from "../../main/api/getAssets/getMapAssets.mjs";
-import { fetchMap } from "../../main/api/getMatch/getMatchInfo.mjs";
+import { fetchMap, fetchMode } from "../../main/api/getMatch/getMatchInfo.mjs";
 import { handleClick } from "../../main/helpers";
 import Link from "@mui/material/Link";
 
 function Navbar() {
   const [mapImage, setMapImage] = useState("");
   const [mapDisplayName, setMapDisplayName] = useState("");
+  const [gameMode, setGameMode] = useState("");
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const mapId = await fetchMap();
-
-      setMapImage(await fetchMapImage(mapId));
-      setMapDisplayName(await fetchMapDisplayName(mapId));
+      const mapId = await fetchMap(); // Fetch current map ID
+      const mode = await fetchMode(); // Fetch current game mode
+      setGameMode("");
+      setGameMode(mode.charAt(0).toUpperCase() + mode.slice(1)); // Capitalize and set game mode
+      setMapImage("");
+      setMapImage(await fetchMapImage(mapId)); // Set map image based on map ID
+      setMapDisplayName("");
+      setMapDisplayName(await fetchMapDisplayName(mapId)); // Set map display name based on map ID
     }, 5000);
 
     return () => clearInterval(interval);
@@ -68,7 +73,6 @@ function Navbar() {
               width: "100%",
             }}
           >
-            {/* Brand Name */}
             <Box
               sx={{
                 display: "flex",
@@ -97,29 +101,57 @@ function Navbar() {
                 </Typography>
               </Link>
             </Box>
-
             <Box
               sx={{
                 display: "flex",
+                flexGrow: 0.5,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundImage: `url(${mapImage})`,
-                backgroundSize: "contain",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                width: "30%",
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  fontFamily: "Roboto",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  fontSize: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "30%",
                 }}
               >
-                {mapDisplayName}
-              </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Roboto",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                  }}
+                >
+                  {gameMode}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundImage: `url(${mapImage})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  width: "35%",
+                  borderRadius: "5", // add borderRadius
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Roboto",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                  }}
+                >
+                  {mapDisplayName}
+                </Typography>
+              </Box>
             </Box>
 
             <Box

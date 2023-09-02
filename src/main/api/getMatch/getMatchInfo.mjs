@@ -75,9 +75,11 @@ export async function fetchMode() {
   let responseData;
   if (match !== undefined) {
     responseData = await fetchMatch();
+    return responseData.MatchmakingData.QueueID;
   } else if (preMatch !== undefined) {
     responseData = await fetchPreMatch();
+    return responseData.QueueID;
+  } else {
+    return undefined;
   }
-
-  return responseData.MapID;
 }

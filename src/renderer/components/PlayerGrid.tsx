@@ -37,7 +37,6 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
   const [match, setMatch] = useState<boolean>(false);
   const [preMatch, setPreMatch] = useState<boolean>(false);
   const [matchData, setMatchData] = useState<PlayerData[]>([]);
-  const [puuid, setPuuid] = useState();
   const [isDeathmatch, setIsDeathmatch] = useState(false);
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       setIsClientRunning(lockfile !== undefined ? true : false);
       setIsGameRunning(checkGame !== undefined ? true : false);
     };
-    const intervalId = setInterval(checkForLockfile, 500);
+    const intervalId = setInterval(checkForLockfile, 2000);
 
     return () => {
       clearInterval(intervalId);
@@ -59,17 +58,17 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       if (isGameRunning) {
         const match = await fetchMatchID();
         const preMatch = await fetchPreMatchID();
+        setMatch(false);
+        setPreMatch(false);
         if (match !== undefined) {
           setMatch(true);
-          setPreMatch(false);
         }
         if (preMatch !== undefined) {
           setPreMatch(true);
-          setMatch(false);
         }
       }
     };
-    const intervalId = setInterval(checkForMatch, 3000);
+    const intervalId = setInterval(checkForMatch, 5000);
 
     return () => {
       clearInterval(intervalId);
@@ -78,7 +77,6 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     const fetchPlayerData = async () => {
-      setPuuid(await fetchPuuid());
       let playerData: PlayerData[] = [];
       if (preMatch) {
         const data = await fetchPreMatch();
@@ -119,14 +117,12 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       setIsDeathmatch(isDeathmatch);
     };
 
-    if (isGameRunning && (preMatch || match)) {
-      fetchPlayerData();
-    }
+    fetchPlayerData();
   }, [isGameRunning, preMatch, match]);
 
   return (
     <>
-      {preMatch || match ? (
+      {(preMatch || match) && (
         <Grid container spacing={0.5}>
           <Team
             playerData={matchData}
@@ -145,7 +141,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
             preGame={preMatch}
           />
         </Grid>
-      ) : null}
+      )}
 
       {isGameRunning && !preMatch && !match ? (
         <Stack spacing={10} justifyContent="center" alignItems="center">

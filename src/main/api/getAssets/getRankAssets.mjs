@@ -23,5 +23,9 @@ export async function getRankName(tier) {
 
 export async function getRankImage(tier) {
   const UUID = await getLatestUUID();
-  return `https://media.valorant-api.com/competitivetiers/${UUID}/${tier}/largeicon.png`;
+  if (tier === 0) {
+    return "https://i.ibb.co/hYmkrkv/largeicon-modified.png";
+  } else {
+    return `https://media.valorant-api.com/competitivetiers/${UUID}/${tier}/largeicon.png`;
+  }
 }
