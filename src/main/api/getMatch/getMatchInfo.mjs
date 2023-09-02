@@ -38,9 +38,6 @@ export async function fetchMatch() {
     const region = await fetchRegion();
     const matchID = await fetchMatchID();
 
-    if (matchID === undefined) {
-    }
-
     const url = `https://glz-${region}-1.${shard}.a.pvp.net/core-game/v1/matches/${matchID}`;
 
     const headers = {

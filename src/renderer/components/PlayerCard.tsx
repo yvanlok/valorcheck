@@ -125,7 +125,7 @@ const PlayerCard = (props: Props) => {
       if (rankTier === 0 || rank === undefined) {
         const response = await fetchRankHenrik(puuid);
 
-        setRankTier(response === null ? 0 : response.currentRank);
+        setRankTier(response.currentRank);
         setPeakRankTier(response.peakRank);
       } else {
         setPeakRankTier(await fetchPeakRank(puuid));
@@ -184,7 +184,8 @@ const PlayerCard = (props: Props) => {
         <Box
           sx={{
             width: queue === "deathmatch" ? "50vw" : "50vw",
-            height: queue === "deathmatch" ? "14vh" : "16.5vh",
+            height:
+              queue === "deathmatch" ? "14vh" : isPlayer ? "18vh" : "16.5vh",
             backgroundImage: `url(${playerCard})`,
             backgroundSize: "100% 100%", // set backgroundSize to stretch the image to fill the Box
             backgroundPosition: "center",
@@ -252,13 +253,14 @@ const PlayerCard = (props: Props) => {
             </Tooltip>
             <Box
               sx={{
-                flex: 0.8,
+                width: "auto",
               }}
             >
               <Box
                 sx={{
                   backgroundColor: theme.palette.primary.main,
                   borderRadius: "5px",
+                  padding: "0rem 0.5rem",
                 }}
               >
                 <Typography

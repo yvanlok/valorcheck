@@ -75,9 +75,10 @@ export async function fetchRankHenrik(puuid) {
     `https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/${region}/${puuid}`
   );
   const responseData = await response.json();
-
+  const currentRank = responseData.data.current_data.currenttier;
+  const peakRank = responseData.data.highest_rank.tier;
   return {
-    currentRank: responseData.data.current_data.currenttier,
-    peakRank: responseData.data.highest_rank.tier,
+    currentRank: currentRank ? currentRank : 0,
+    peakRank: peakRank ? peakRank : 0,
   };
 }

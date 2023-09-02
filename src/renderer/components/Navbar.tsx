@@ -51,7 +51,7 @@ function Navbar() {
     } else {
       // Display an error message or notification
       alert(
-        "You tried to refresh too soon. This can cause problems with displaying statistics and ranks. Try again later in 30 seconds."
+        "You tried to refresh too soon. This can cause problems with displaying statistics and ranks. Try again in 30 seconds."
       );
     }
   };
