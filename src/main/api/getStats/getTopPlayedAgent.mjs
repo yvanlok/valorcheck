@@ -9,9 +9,7 @@ export async function fetchTopPlayedAgent(matchResults) {
   }, {});
 
   // Find the most common occurrence
-  const mostCommon = Object.keys(countOccurrences).reduce((a, b) =>
-    countOccurrences[a] > countOccurrences[b] ? a : b
-  );
+  const mostCommon = Object.keys(countOccurrences).reduce((a, b) => (countOccurrences[a] > countOccurrences[b] ? a : b));
 
   return mostCommon;
 }

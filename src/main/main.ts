@@ -7,7 +7,7 @@ let mainWindow: Electron.BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1400,
+    width: 1600,
     height: 900,
     backgroundColor: "#f2f2f2",
     center: true,

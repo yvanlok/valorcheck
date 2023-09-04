@@ -8,33 +8,40 @@ import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
 import SettingsIcon from "@mui/icons-material/Settings";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import {
-  fetchMapDisplayName,
-  fetchMapImage,
-} from "../../main/api/getAssets/getMapAssets.mjs";
+import { fetchMapDisplayName, fetchMapImage } from "../../main/api/getAssets/getMapAssets.mjs";
 import { fetchMap, fetchMode } from "../../main/api/getMatch/getMatchInfo.mjs";
 import { handleClick } from "../../main/helpers";
 import Link from "@mui/material/Link";
 
 function Navbar() {
   const [mapImage, setMapImage] = useState("");
+  const [mapId, setMapId] = useState("");
+  const [mode, setMode] = useState("");
   const [mapDisplayName, setMapDisplayName] = useState("");
-  const [gameMode, setGameMode] = useState("");
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const mapId = await fetchMap(); // Fetch current map ID
-      const mode = await fetchMode(); // Fetch current game mode
-      setGameMode("");
-      setGameMode(mode.charAt(0).toUpperCase() + mode.slice(1)); // Capitalize and set game mode
-      setMapImage("");
-      setMapImage(await fetchMapImage(mapId)); // Set map image based on map ID
-      setMapDisplayName("");
-      setMapDisplayName(await fetchMapDisplayName(mapId)); // Set map display name based on map ID
+      setMapId(await fetchMap());
+      setMode(await fetchMode());
     }, 5000);
 
+    // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const fetchMapAssets = async () => {
+      if (mapId !== "") {
+        setMapImage(await fetchMapImage(mapId));
+        setMapDisplayName(await fetchMapDisplayName(mapId));
+      } else {
+        setMapImage("");
+        setMapDisplayName("");
+      }
+    };
+
+    fetchMapAssets();
+  }, [mapId]);
 
   const [lastRefresh, setLastRefresh] = useState(() => {
     const localStorageValue = localStorage.getItem("lastRefresh");
@@ -55,9 +62,7 @@ function Navbar() {
       window.location.reload();
     } else {
       // Display an error message or notification
-      alert(
-        "You tried to refresh too soon. This can cause problems with displaying statistics and ranks. Try again in 30 seconds."
-      );
+      alert("You tried to refresh too soon. This can cause problems with displaying statistics and ranks. Try again in 30 seconds.");
     }
   };
 
@@ -81,9 +86,7 @@ function Navbar() {
             >
               <Link
                 href="https://github.com/yvanlok/valorcheck"
-                onClick={(e) =>
-                  handleClick(e, "https://github.com/yvanlok/valorcheck")
-                }
+                onClick={(e) => handleClick(e, "https://github.com/yvanlok/valorcheck")}
                 underline="hover"
               >
                 <Typography
@@ -125,7 +128,7 @@ function Navbar() {
                     fontSize: 20,
                   }}
                 >
-                  {gameMode}
+                  {mode ? mode.charAt(0).toUpperCase() + mode.slice(1) : ""}
                 </Typography>
               </Box>
               <Box

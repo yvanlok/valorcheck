@@ -5,12 +5,9 @@ export async function getCardImage(cardID) {
 }
 
 export async function getCardDisplayName(cardID) {
-  const response = await fetch(
-    `hhttps://valorant-api.com/v1/playercards/${cardID}`,
-    {
-      method: "GET",
-    }
-  );
+  const response = await fetch(`hhttps://valorant-api.com/v1/playercards/${cardID}`, {
+    method: "GET",
+  });
 
   const responseData = await response.json();
 

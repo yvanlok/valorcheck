@@ -59,9 +59,7 @@ export async function fetchMatchData(puuid) {
     matches.map(async (match) => {
       try {
         const matchData = await fetchMatch(match);
-        const matchingPlayer = matchData.players.find(
-          (player) => player.subject === puuid
-        );
+        const matchingPlayer = matchData.players.find((player) => player.subject === puuid);
         return matchingPlayer;
       } catch (error) {
         return null; // Handle errors gracefully
@@ -78,9 +76,7 @@ export async function fetchAllMatchResults(puuid) {
     matches.map(async (match) => {
       try {
         const matchData = await fetchMatch(match);
-        const matchingPlayer = matchData.players.find(
-          (player) => player.subject === puuid
-        );
+        const matchingPlayer = matchData.players.find((player) => player.subject === puuid);
         return matchingPlayer;
       } catch (error) {
         return null; // Handle errors gracefully

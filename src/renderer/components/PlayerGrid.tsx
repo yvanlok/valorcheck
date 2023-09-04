@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-import { Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import getLockfileData from "../../main/api/getLockfileData.mjs";
-import {
-  fetchMatchID,
-  fetchPreMatchID,
-} from "../../main/api/getMatch/getMatchID.mjs";
-import {
-  fetchMatch,
-  fetchPreMatch,
-} from "../../main/api/getMatch/getMatchInfo.mjs";
-
+import { fetchMatchID, fetchPreMatchID } from "../../main/api/getMatch/getMatchID.mjs";
+import { fetchMatch, fetchPreMatch } from "../../main/api/getMatch/getMatchInfo.mjs";
 import PlayerCard from "./PlayerCard";
-
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import Stack from "@mui/material/Stack";
-import { fetchPuuid, fetchRegion } from "../../main/api/basicHelpers.mjs";
+import { fetchPuuid } from "../../main/api/basicHelpers.mjs";
 import Team from "./Team";
+import StatusMessage from "./StatusMessage";
 
 type Props = {};
 
@@ -80,38 +70,32 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       let playerData: PlayerData[] = [];
       if (preMatch) {
         const data = await fetchPreMatch();
-        playerData = (data as Record<string, any>).AllyTeam.Players.map(
-          (player: Record<string, any>) => ({
-            subjectId: player.Subject,
-            characterId: null,
-            team: (data as Record<string, any>).AllyTeam.TeamID,
-            accountLvl: player.PlayerIdentity.AccountLevel,
-            playerCardId: player.PlayerIdentity.PlayerCardID,
-            queueId: (data as Record<string, any>).QueueID,
-            rank: player.CompetitiveTier,
-          })
-        );
+        playerData = (data as Record<string, any>).AllyTeam.Players.map((player: Record<string, any>) => ({
+          subjectId: player.Subject,
+          characterId: null,
+          team: (data as Record<string, any>).AllyTeam.TeamID,
+          accountLvl: player.PlayerIdentity.AccountLevel,
+          playerCardId: player.PlayerIdentity.PlayerCardID,
+          queueId: (data as Record<string, any>).QueueID,
+          rank: player.CompetitiveTier,
+        }));
       } else if (match) {
         const data = await fetchMatch();
-        playerData = (data as Record<string, any>).Players.map(
-          (player: Record<string, any>) => ({
-            subjectId: player.Subject,
-            characterId: player.CharacterID,
-            team: player.TeamID,
-            accountLvl: player.PlayerIdentity.AccountLevel,
-            playerCardId: player.PlayerIdentity.PlayerCardID,
-            queueId: (data as Record<string, any>).MatchmakingData.QueueID,
-            rank: player.SeasonalBadgeInfo.Rank,
-          })
-        );
+        playerData = (data as Record<string, any>).Players.map((player: Record<string, any>) => ({
+          subjectId: player.Subject,
+          characterId: player.CharacterID,
+          team: player.TeamID,
+          accountLvl: player.PlayerIdentity.AccountLevel,
+          playerCardId: player.PlayerIdentity.PlayerCardID,
+          queueId: (data as Record<string, any>).MatchmakingData.QueueID,
+          rank: player.SeasonalBadgeInfo.Rank,
+        }));
       } else {
         return;
       }
 
       // Check if the queue is Deathmatch
-      const isDeathmatch = playerData.some(
-        (player) => player.queueId === "deathmatch"
-      );
+      const isDeathmatch = playerData.some((player) => player.queueId === "deathmatch");
 
       setMatchData(playerData as PlayerData[]);
       setIsDeathmatch(isDeathmatch);
@@ -123,127 +107,56 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
   return (
     <>
       {(preMatch || match) && (
-        <Grid container spacing={0.5}>
-          <Team
-            playerData={matchData}
-            teamColor="Blue"
-            startPlayers={0}
-            endPlayers={isDeathmatch ? 6 : 5}
-            isDeathmatch={isDeathmatch}
-            preGame={preMatch}
-          />
-          <Team
-            playerData={matchData}
-            teamColor={isDeathmatch ? "Blue" : "Red"}
-            startPlayers={isDeathmatch ? 6 : 0}
-            endPlayers={isDeathmatch ? 12 : 5}
-            isDeathmatch={isDeathmatch}
-            preGame={preMatch}
-          />
-        </Grid>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={1} disableEqualOverflow>
+            <Grid xs>
+              <Team
+                playerData={matchData}
+                teamColor="Blue"
+                startPlayers={0}
+                endPlayers={isDeathmatch ? 6 : 5}
+                isDeathmatch={isDeathmatch}
+                preGame={preMatch}
+              />
+            </Grid>
+            <Grid xs>
+              <Team
+                playerData={matchData}
+                teamColor={isDeathmatch ? "Blue" : "Red"}
+                startPlayers={isDeathmatch ? 6 : 0}
+                endPlayers={isDeathmatch ? 12 : 5}
+                isDeathmatch={isDeathmatch}
+                preGame={preMatch}
+              />
+            </Grid>
+          </Grid>
+        </Box>
       )}
 
-      {isGameRunning && !preMatch && !match ? (
+      {isGameRunning && !preMatch && !match && (
         <Stack spacing={10} justifyContent="center" alignItems="center">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CheckIcon style={{ marginRight: "8px", color: "green" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Valorant running
-            </Typography>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CheckIcon style={{ marginRight: "8px", color: "green" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Client running
-            </Typography>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Not in a game
-            </Typography>
-          </div>
+          <StatusMessage icon="check" color="green" message="Client running" />
+          <StatusMessage icon="check" color="green" message="Valorant running" />
+          <StatusMessage icon="close" color="red" message="Not in a game" />
           <div style={{ display: "flex", alignItems: "center" }}>
             <PlayerCard isPlayer />
           </div>
         </Stack>
-      ) : null}
+      )}
 
-      {!isClientRunning && !isGameRunning ? (
+      {isClientRunning && !isGameRunning && (
         <Stack spacing={10} justifyContent="center" alignItems="center">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Client running
-            </Typography>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Game running
-            </Typography>
-          </div>
+          <StatusMessage icon="check" color="green" message="Client running" />
+          <StatusMessage icon="close" color="red" message="Valorant running" />
         </Stack>
-      ) : null}
-      {isClientRunning && !isGameRunning ? (
+      )}
+
+      {!isClientRunning && !isGameRunning && (
         <Stack spacing={10} justifyContent="center" alignItems="center">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CheckIcon style={{ marginRight: "8px", color: "green" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Client running
-            </Typography>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <CloseIcon style={{ marginRight: "8px", color: "red" }} />
-            <Typography
-              sx={{
-                fontFamily: "Roboto",
-                textAlign: "center",
-                fontSize: "20",
-              }}
-            >
-              Game running
-            </Typography>
-          </div>
+          <StatusMessage icon="close" color="red" message="Client running" />
+          <StatusMessage icon="close" color="red" message="Valorant running" />
         </Stack>
-      ) : null}
+      )}
     </>
   );
 };

@@ -9,9 +9,7 @@ export default async function fetchToken() {
 
     const { lockfilePassword, lockfilePort } = lockfileData;
     const url = `https://127.0.0.1:${lockfilePort}/entitlements/v1/token`;
-    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString(
-      "base64"
-    );
+    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString("base64");
 
     const headers = { Authorization: `Basic ${encodedPassword}` };
     const options = {

@@ -54,11 +54,7 @@ export async function fetchPeakRank(puuid) {
 
     for (const season of seasons) {
       const seasonMMR = responseData[season];
-      if (
-        seasonMMR &&
-        seasonMMR.CompetitiveTier &&
-        seasonMMR.CompetitiveTier > peakRank
-      ) {
+      if (seasonMMR && seasonMMR.CompetitiveTier && seasonMMR.CompetitiveTier > peakRank) {
         peakRank = seasonMMR.CompetitiveTier;
       }
     }
@@ -71,9 +67,7 @@ export async function fetchPeakRank(puuid) {
 
 export async function fetchRankHenrik(puuid) {
   const region = await fetchRegion();
-  const response = await fetch(
-    `https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/${region}/${puuid}`
-  );
+  const response = await fetch(`https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/${region}/${puuid}`);
   const responseData = await response.json();
   const currentRank = responseData.data.current_data.currenttier;
   const peakRank = responseData.data.highest_rank.tier;

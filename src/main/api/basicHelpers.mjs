@@ -15,9 +15,7 @@ export async function fetchShard() {
     const { lockfilePassword, lockfilePort } = lockfileData;
     const url = `https://127.0.0.1:${lockfilePort}/product-session/v1/external-sessions`;
 
-    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString(
-      "base64"
-    );
+    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString("base64");
     const headers = { Authorization: `Basic ${encodedPassword}` };
     const options = {
       method: "GET",
@@ -31,11 +29,8 @@ export async function fetchShard() {
     let shard = null;
 
     for (const key in responseData) {
-      const launchConfigurationArgs =
-        responseData[key]?.launchConfiguration?.arguments || [];
-      const shardArg = launchConfigurationArgs.find((arg) =>
-        arg.startsWith("-ares-deployment=")
-      );
+      const launchConfigurationArgs = responseData[key]?.launchConfiguration?.arguments || [];
+      const shardArg = launchConfigurationArgs.find((arg) => arg.startsWith("-ares-deployment="));
 
       if (shardArg) {
         shard = shardArg.split("=")[1];
@@ -60,9 +55,7 @@ export async function fetchNameTag() {
     const { lockfilePassword, lockfilePort } = lockfileData;
     const url = `https://127.0.0.1:${lockfilePort}/player-account/aliases/v1/active`;
 
-    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString(
-      "base64"
-    );
+    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString("base64");
     const headers = { Authorization: `Basic ${encodedPassword}` };
     const options = {
       method: "GET",
@@ -110,9 +103,7 @@ export async function fetchPuuid() {
     const { lockfilePassword, lockfilePort } = lockfileData;
     const url = `https://127.0.0.1:${lockfilePort}/rso-auth/v1/authorization/userinfo`;
 
-    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString(
-      "base64"
-    );
+    const encodedPassword = Buffer.from(`riot:${lockfilePassword}`).toString("base64");
     const headers = { Authorization: `Basic ${encodedPassword}` };
     const options = {
       method: "GET",

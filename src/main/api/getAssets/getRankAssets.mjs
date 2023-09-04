@@ -9,9 +9,7 @@ async function getLatestUUID() {
 
 export async function getRankName(tier) {
   const UUID = await getLatestUUID();
-  const response = await fetch(
-    `https://valorant-api.com/v1/competitivetiers/${UUID}`
-  );
+  const response = await fetch(`https://valorant-api.com/v1/competitivetiers/${UUID}`);
 
   const responseData = await response.json();
   const tiers = responseData.data.tiers;

@@ -64,6 +64,8 @@ export async function fetchMap() {
     responseData = await fetchMatch();
   } else if (preMatch !== undefined) {
     responseData = await fetchPreMatch();
+  } else {
+    return "";
   }
 
   return responseData.MapID;
@@ -80,6 +82,6 @@ export async function fetchMode() {
     responseData = await fetchPreMatch();
     return responseData.QueueID;
   } else {
-    return undefined;
+    return "";
   }
 }
