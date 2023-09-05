@@ -18,6 +18,10 @@
 <a href="https://github.com/yvanlok/valorcheck/pulls" target="_blank">
 <img src="https://img.shields.io/github/issues-pr/yvanlok/valorcheck?style=flat-square" alt="pull-requests"/>
 </a>
+<a href="https://github.com/yvanlok/valorcheck/releases" target="_blank">
+<img src="https://img.shields.io/github/downloads/yvanlok/valorcheck/total?style=flat-square" alt="downloads"/>
+</a>
+
 
 ## How To
 
