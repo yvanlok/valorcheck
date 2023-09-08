@@ -71,12 +71,20 @@ const PlayerCard = (props: Props) => {
       const response = await fetchAllMatchResults(puuid);
       setMatchData(response);
     };
+
+    defineMatchData();
+  }, [puuid]);
+
+  useEffect(() => {
     const fetchStats = async () => {
       const KD = await fetchKD(matchData);
+      const winPercent = await fetchWinPercent(puuid);
       setPlayerKD(Number.isNaN(KD) ? 0 : KD);
-      setPlayerWinPercentage(await fetchWinPercent(puuid));
+      setPlayerWinPercentage(winPercent);
+      if (preGame || isPlayer) {
+        await setAgentUUID(await fetchTopPlayedAgent(matchData));
+      }
     };
-    defineMatchData();
     fetchStats();
   }, [puuid, matchData]);
 
@@ -113,9 +121,6 @@ const PlayerCard = (props: Props) => {
 
   useEffect(() => {
     const fetchAgentAssets = async () => {
-      if (preGame || isPlayer) {
-        await setAgentUUID(await fetchTopPlayedAgent(matchData));
-      }
       setAgentSrc(await getAgentImage(agentUUID));
       setAgentName(await getAgentDisplayName(agentUUID));
     };

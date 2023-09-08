@@ -8,6 +8,7 @@ import PlayerCard from "./PlayerCard";
 import { fetchPuuid } from "../../main/api/basicHelpers.mjs";
 import Team from "./Team";
 import StatusMessage from "./StatusMessage";
+import { fetchLoadouts } from "../../main/api/getMatch/getMatchLoadouts.mjs";
 
 type Props = {};
 
@@ -81,15 +82,19 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
         }));
       } else if (match) {
         const data = await fetchMatch();
-        playerData = (data as Record<string, any>).Players.map((player: Record<string, any>) => ({
-          subjectId: player.Subject,
-          characterId: player.CharacterID,
-          team: player.TeamID,
-          accountLvl: player.PlayerIdentity.AccountLevel,
-          playerCardId: player.PlayerIdentity.PlayerCardID,
-          queueId: (data as Record<string, any>).MatchmakingData.QueueID,
-          rank: player.SeasonalBadgeInfo.Rank,
-        }));
+
+        const playerData = (data as Record<string, any>).Players.map((player: Record<string, any>) => {
+          return {
+            subjectId: player.Subject,
+            characterId: player.CharacterID,
+            team: player.TeamID,
+            accountLvl: player.PlayerIdentity.AccountLevel,
+            playerCardId: player.PlayerIdentity.PlayerCardID,
+            queueId: (data as Record<string, any>).MatchmakingData.QueueID,
+            rank: player.SeasonalBadgeInfo.Rank,
+            skins: {}, // Assign the skins object to the player's skins property
+          };
+        });
       } else {
         return;
       }
@@ -139,7 +144,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
           <StatusMessage icon="check" color="green" message="Valorant running" />
           <StatusMessage icon="close" color="red" message="Not in a game" />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <PlayerCard isPlayer />
+            <PlayerCard isPlayer={true} />
           </div>
         </Stack>
       )}
