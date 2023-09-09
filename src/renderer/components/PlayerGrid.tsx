@@ -83,18 +83,15 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
       } else if (match) {
         const data = await fetchMatch();
 
-        const playerData = (data as Record<string, any>).Players.map((player: Record<string, any>) => {
-          return {
-            subjectId: player.Subject,
-            characterId: player.CharacterID,
-            team: player.TeamID,
-            accountLvl: player.PlayerIdentity.AccountLevel,
-            playerCardId: player.PlayerIdentity.PlayerCardID,
-            queueId: (data as Record<string, any>).MatchmakingData.QueueID,
-            rank: player.SeasonalBadgeInfo.Rank,
-            skins: {}, // Assign the skins object to the player's skins property
-          };
-        });
+        playerData = (data as Record<string, any>).Players.map((player: Record<string, any>) => ({
+          subjectId: player.Subject,
+          characterId: player.CharacterID,
+          team: player.TeamID,
+          accountLvl: player.PlayerIdentity.AccountLevel,
+          playerCardId: player.PlayerIdentity.PlayerCardID,
+          queueId: (data as Record<string, any>).MatchmakingData.QueueID,
+          rank: player.SeasonalBadgeInfo.Rank,
+        }));
       } else {
         return;
       }
