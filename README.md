@@ -21,8 +21,11 @@
 <a href="https://github.com/yvanlok/valorcheck/releases" target="_blank">
 <img src="https://img.shields.io/github/downloads/yvanlok/valorcheck/total?style=flat-square" alt="downloads"/>
 </a>
-
-
+<br>
+<a href="https://ko-fi.com/C0C7NTGQX" target="_blank">
+<img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" />
+</a>
+   
 ## How To
 
 1. Install the latest version from the [releases](https://github.com/yvanlok/valorcheck/releases)
@@ -88,6 +91,12 @@ Pull requests are always welcome 😃.
 <h3>
 A ⭐️ to ValorCheck is a ⭐️ to the brilliant open-source community of developers
 </h3>
+
+## Donating
+
+- [Kofi](https://ko-fi.com/yvanl/goal?g=0)
+- Crypto
+- PayPal
 
 
 ## License
