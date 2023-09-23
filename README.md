@@ -49,18 +49,7 @@
 - Link to [tracker.gg](https://tracker.gg/valorant) profile for more in-depth stats
 - Peak Rank 
 - Auto update
-
-## Features coming soon
-- Party viewer
-- Skins viewer (search for skins?)
-- Peak Rank | DONE
-- Auto update | DONE
-- Settings Menu
-  - Change number of games for stats
-  - Change viewable stats
-  - Change skins to display
-  - *Optional* analytics
-- Better support on different screens | PARTLY DONE
+- [Feature table](https://github.com/users/yvanlok/projects/2)
 
 ## Known issues (OPEN ISSUES IF FOUND)
 - Looks ugly on different resolutions/screens
