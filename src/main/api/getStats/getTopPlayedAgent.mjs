@@ -1,5 +1,13 @@
-export async function fetchTopPlayedAgent(matchResults) {
-  // Count the occurrences of each element using reduce
+export async function fetchTopPlayedAgent(matchResults, puuid) {
+  const players = JSON.parse(localStorage.getItem("players")) || {};
+  players[puuid] = players[puuid] || {};
+  const playerData = players[puuid];
+
+  const currentTimestamp = new Date();
+  if (playerData.topPlayedAgent && currentTimestamp - new Date(playerData.topPlayedAgent.lastUpdated) < 30 * 60 * 1000) {
+    return playerData.topPlayedAgent.value;
+  }
+
   const countOccurrences = matchResults.reduce((acc, result) => {
     if (result.status === "fulfilled" && result.value !== null) {
       const characterId = result.value.characterId;
@@ -8,8 +16,22 @@ export async function fetchTopPlayedAgent(matchResults) {
     return acc;
   }, {});
 
-  // Find the most common occurrence
-  const mostCommon = Object.keys(countOccurrences).reduce((a, b) => (countOccurrences[a] > countOccurrences[b] ? a : b));
+  let mostCommonAgent = null;
+  let mostCommonCount = 0;
 
-  return mostCommon;
+  for (const characterId in countOccurrences) {
+    if (countOccurrences[characterId] > mostCommonCount) {
+      mostCommonAgent = characterId;
+      mostCommonCount = countOccurrences[characterId];
+    }
+  }
+
+  const mostCommonAgentData = {
+    lastUpdated: currentTimestamp,
+    value: mostCommonAgent,
+  };
+
+  playerData.topPlayedAgent = mostCommonAgentData;
+  localStorage.setItem("players", JSON.stringify(players));
+  return mostCommonAgentData;
 }

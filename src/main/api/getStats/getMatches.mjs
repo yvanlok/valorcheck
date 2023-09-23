@@ -52,8 +52,6 @@ export async function fetchMatch(matchID) {
 }
 
 export async function fetchMatchData(puuid) {
-  // Use Promise.allSettled to execute all promises in parallel
-
   const matches = await fetchMatches(puuid);
   const matchResults = await Promise.allSettled(
     matches.map(async (match) => {
@@ -62,7 +60,7 @@ export async function fetchMatchData(puuid) {
         const matchingPlayer = matchData.players.find((player) => player.subject === puuid);
         return matchingPlayer;
       } catch (error) {
-        return null; // Handle errors gracefully
+        return null;
       }
     })
   );
@@ -70,18 +68,37 @@ export async function fetchMatchData(puuid) {
 }
 
 export async function fetchAllMatchResults(puuid) {
+  const players = JSON.parse(localStorage.getItem("players")) || {};
+  const playerData = players[puuid] || {};
+
+  const storedMatches = playerData.matches?.matchIDs || [];
   const matches = await fetchMatches(puuid);
 
-  const matchResults = await Promise.allSettled(
-    matches.map(async (match) => {
+  const newMatches = matches.filter((match) => !storedMatches.includes(match));
+
+  playerData.matches = playerData.matches || {};
+  playerData.matches.matchIDs = [...storedMatches, ...newMatches];
+
+  playerData.matches.numberOfMatches = playerData.matches.matchIDs.length;
+  playerData.matches.lastUpdated = new Date();
+
+  const newMatchResults = await Promise.allSettled(
+    newMatches.map(async (match) => {
       try {
         const matchData = await fetchMatch(match);
         const matchingPlayer = matchData.players.find((player) => player.subject === puuid);
         return matchingPlayer;
       } catch (error) {
-        return null; // Handle errors gracefully
+        return undefined;
       }
     })
   );
-  return matchResults;
+
+  playerData.matches.matchResults = playerData.matches.matchResults || [];
+  playerData.matches.matchResults.push(...newMatchResults);
+
+  players[puuid] = playerData;
+  localStorage.setItem("players", JSON.stringify(players));
+
+  return playerData.matches.matchResults;
 }

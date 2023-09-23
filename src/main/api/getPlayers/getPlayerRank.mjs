@@ -4,7 +4,6 @@ import { fetchCurrentSeason, fetchShard } from "../basicHelpers.mjs";
 import { fetchClientVersion } from "../basicHelpers.mjs";
 import { fetchRegion } from "../basicHelpers.mjs";
 
-// Fetches the shard information
 export async function fetchPlayerMMR(puuid) {
   try {
     const { token, entitlement } = await fetchToken();
@@ -36,7 +35,6 @@ export async function fetchPlayerMMR(puuid) {
 export async function fetchCurrentRank(puuid) {
   const responseData = await fetchPlayerMMR(puuid);
   const currentSeason = await fetchCurrentSeason();
-  // Find the MMR data for the current season
   const currentSeasonMMR = responseData[currentSeason];
   if (currentSeasonMMR) {
     return currentSeasonMMR.CompetitiveTier;
@@ -66,13 +64,29 @@ export async function fetchPeakRank(puuid) {
 }
 
 export async function fetchRankHenrik(puuid) {
+  const players = JSON.parse(localStorage.getItem("players")) || {};
+  const playerData = players[puuid] || {};
+  const currentTimestamp = new Date();
+  const key = "rank";
+
+  if (playerData[key] && currentTimestamp - new Date(playerData[key].lastUpdated) < 15 * 60 * 1000) {
+    return playerData[key].value;
+  }
   const region = await fetchRegion();
   const response = await fetch(`https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/${region}/${puuid}`);
   const responseData = await response.json();
+
   const currentRank = responseData.data.current_data.currenttier;
   const peakRank = responseData.data.highest_rank.tier;
-  return {
+  const rankData = {
     currentRank: currentRank ? currentRank : 0,
     peakRank: peakRank ? peakRank : 0,
   };
+
+  playerData[key] = { lastUpdated: currentTimestamp.toISOString(), value: rankData };
+  players[puuid] = playerData;
+
+  localStorage.setItem("players", JSON.stringify(players));
+
+  return rankData;
 }

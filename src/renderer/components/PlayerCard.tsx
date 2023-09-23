@@ -77,12 +77,14 @@ const PlayerCard = (props: Props) => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const KD = await fetchKD(matchData);
-      const winPercent = await fetchWinPercent(puuid);
-      setPlayerKD(Number.isNaN(KD) ? 0 : KD);
-      setPlayerWinPercentage(winPercent);
-      if (preGame || isPlayer) {
-        await setAgentUUID(await fetchTopPlayedAgent(matchData));
+      if (matchData && puuid) {
+        const KD = await fetchKD(matchData, puuid);
+        const winPercent = await fetchWinPercent(puuid);
+        setPlayerKD(Number.isNaN(KD) ? 0 : KD);
+        setPlayerWinPercentage(winPercent);
+        if (preGame || isPlayer) {
+          await setAgentUUID(await fetchTopPlayedAgent(matchData, puuid));
+        }
       }
     };
     fetchStats();
@@ -92,11 +94,13 @@ const PlayerCard = (props: Props) => {
     const fetchAccountDetails = async () => {
       if (isPlayer) {
         setPuuid(await fetchPuuid());
-        const response = await getAccount(puuid);
-        const accountResponse = response as AccountResponse;
-        setAccountLevel(accountResponse.data.account_level);
-        setPlayerCard(accountResponse.data.card.wide);
-        setPlayerName(`${accountResponse.data.name}#${accountResponse.data.tag}`);
+        if (puuid) {
+          const response = await getAccount(puuid);
+          const accountResponse = response as AccountResponse;
+          setAccountLevel(accountResponse.data.account_level);
+          setPlayerCard(accountResponse.data.card.wide);
+          setPlayerName(`${accountResponse.data.name}#${accountResponse.data.tag}`);
+        }
       } else {
         const nameTag = await getNameTagFromPuuid(puuid);
         if (nameTag?.name && nameTag?.tag) {
@@ -105,14 +109,11 @@ const PlayerCard = (props: Props) => {
         setAccountLevel(accountLvl);
         setPlayerCard(await getCardImage(playerCardId));
       }
-      if (rankTier === 0 || rank === undefined) {
-        const response = await fetchRankHenrik(puuid);
 
-        setRankTier(response.currentRank);
-        setPeakRankTier(response.peakRank);
-      } else {
-        setPeakRankTier(await fetchPeakRank(puuid));
-      }
+      const response = await fetchRankHenrik(puuid);
+      setRankTier(response.currentRank);
+      setPeakRankTier(response.peakRank);
+
       setPlayerTracker(await fetchTracker(puuid));
     };
 

@@ -7,7 +7,7 @@ export async function getAgentImage(agentID) {
 
   const responseData = await response.json();
 
-  return responseData.data.displayIcon;
+  return agentID ? responseData.data.displayIcon : null;
 }
 
 export async function getAgentDisplayName(agentID) {
@@ -17,5 +17,5 @@ export async function getAgentDisplayName(agentID) {
 
   const responseData = await response.json();
 
-  return responseData.data.displayName;
+  return agentID ? responseData.data.displayName : null;
 }
