@@ -80,8 +80,8 @@ const PlayerCard = (props: Props) => {
       if (matchData && puuid) {
         const KD = await fetchKD(matchData, puuid);
         const winPercent = await fetchWinPercent(puuid);
-        setPlayerKD(Number.isNaN(KD) ? 0 : KD);
-        setPlayerWinPercentage(winPercent);
+        setPlayerKD(Number.isNaN(KD) || !KD ? 0 : KD);
+        setPlayerWinPercentage(winPercent ? winPercent : 0);
         if (preGame || isPlayer) {
           await setAgentUUID(await fetchTopPlayedAgent(matchData, puuid));
         }
@@ -153,8 +153,8 @@ const PlayerCard = (props: Props) => {
               src={playerCard}
               alt="Player Card"
               style={{
-                width: "100%", // Make the image width 100%
-                height: "100%", // Make the image height 100%
+                width: "100%",
+                height: "100%",
                 objectFit: "cover",
                 position: "absolute",
                 top: 0,
@@ -205,25 +205,29 @@ const PlayerCard = (props: Props) => {
                 padding: "0 1rem",
               }}
             >
-              <Tooltip title={preGame || isPlayer ? `Top played: ${agentName}` : agentName}>
-                <img
-                  src={agentSrc}
-                  alt="Agent"
-                  style={{
-                    width: "20%",
-                    height: "auto",
-                    marginLeft: "8px",
-                    position: "relative",
-                    zIndex: 2,
-                  }}
-                />
-              </Tooltip>
+              {!(preGame || isPlayer) ? (
+                <Tooltip title={agentName}>
+                  <img
+                    src={agentSrc}
+                    alt="Agent"
+                    style={{
+                      width: "20%",
+                      height: "auto",
+                      marginLeft: "8px",
+                      position: "relative",
+                      zIndex: 2,
+                    }}
+                  />
+                </Tooltip>
+              ) : (
+                <Box width="20%" height="auto" marginLeft="8px" position="relative" zIndex={2} />
+              )}
 
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column", // Stack elements vertically
-                  alignItems: "center", // Center elements horizontally
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
                 <Box
@@ -323,16 +327,16 @@ const PlayerCard = (props: Props) => {
                         justifyContent: "center",
                         alignItems: "center",
                         zIndex: 2,
-                        marginLeft: "5px", // Add margin to match the spacing
+                        marginLeft: "5px",
                       }}
                     >
                       <img
                         src={peakRankSrc}
                         alt="Peak Rank"
                         style={{
-                          width: "100%", // Make the image stretch to fit the box width
-                          height: "100%", // Make the image stretch to fit the box height
-                          objectFit: "cover", // Stretch the image to cover the entire box
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
                       />
                     </Box>
@@ -345,8 +349,8 @@ const PlayerCard = (props: Props) => {
                   src={rankSrc}
                   alt="Rank"
                   style={{
-                    width: "16%", // Reduce the width to 80% of its original size
-                    height: "auto", // Allow the height to adjust proportionally
+                    width: "16%",
+                    height: "auto",
                     marginLeft: "8px",
                     position: "relative",
                     zIndex: 2,

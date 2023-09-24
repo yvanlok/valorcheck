@@ -8,7 +8,6 @@ import PlayerCard from "./PlayerCard";
 import { fetchPuuid } from "../../main/api/basicHelpers.mjs";
 import Team from "./Team";
 import StatusMessage from "./StatusMessage";
-import { fetchLoadouts } from "../../main/api/getMatch/getMatchLoadouts.mjs";
 
 type Props = {};
 
@@ -59,7 +58,7 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
         }
       }
     };
-    const intervalId = setInterval(checkForMatch, 5000);
+    const intervalId = setInterval(checkForMatch, 2000);
 
     return () => {
       clearInterval(intervalId);
@@ -96,7 +95,6 @@ const PlayerGrid: React.FC<Props> = (props: Props) => {
         return;
       }
 
-      // Check if the queue is Deathmatch
       const isDeathmatch = playerData.some((player) => player.queueId === "deathmatch");
 
       setMatchData(playerData as PlayerData[]);
