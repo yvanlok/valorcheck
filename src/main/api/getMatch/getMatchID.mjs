@@ -4,7 +4,6 @@ import { fetchShard } from "../basicHelpers.mjs";
 import { fetchRegion } from "../basicHelpers.mjs";
 import { fetchPuuid } from "../basicHelpers.mjs";
 
-// Fetches the shard information
 export async function fetchPreMatchID() {
   try {
     const { token, entitlement } = await fetchToken();

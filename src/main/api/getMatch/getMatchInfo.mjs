@@ -3,7 +3,7 @@ import fetchToken from "../riotAuth.mjs";
 import { fetchShard } from "../basicHelpers.mjs";
 import { fetchRegion } from "../basicHelpers.mjs";
 import { fetchMatchID, fetchPreMatchID } from "./getMatchID.mjs";
-// Fetches the shard information
+
 export async function fetchPreMatch() {
   try {
     const { token, entitlement } = await fetchToken();

@@ -18,7 +18,7 @@ function Navbar() {
   const [mapImage, setMapImage] = useState("");
   const [mapId, setMapId] = useState("");
   const [mode, setMode] = useState("");
-  const [refreshCountdown, setRefreshCountdown] = useState(60);
+  const [refreshCountdown, setRefreshCountdown] = useState(120);
 
   useEffect(() => {
     const interval = setInterval(async () => {

@@ -4,7 +4,7 @@ export async function fetchTopPlayedAgent(matchResults, puuid) {
   const playerData = players[puuid];
 
   const currentTimestamp = new Date();
-  if (playerData.topPlayedAgent && currentTimestamp - new Date(playerData.topPlayedAgent.lastUpdated) < 30 * 60 * 1000) {
+  if (playerData.topPlayedAgent && currentTimestamp - new Date(playerData.topPlayedAgent.lastUpdated) < 10 * 60 * 1000) {
     return playerData.topPlayedAgent.value;
   }
 

@@ -26,5 +26,7 @@ export async function fetchLoadouts() {
     const responseData = await response.json();
 
     return responseData;
-  } catch (error) {}
+  } catch (error) {
+    return undefined;
+  }
 }

@@ -3,7 +3,7 @@ export async function fetchKD(matchData, puuid) {
   const playerData = players[puuid] || {};
   const currentTimestamp = new Date();
 
-  if (playerData.kdRatio && currentTimestamp - new Date(playerData.kdRatio.lastUpdated) < 30 * 60 * 1000) {
+  if (playerData.kdRatio && currentTimestamp - new Date(playerData.kdRatio.lastUpdated) < 10 * 60 * 1000) {
     return playerData.kdRatio.value;
   }
 

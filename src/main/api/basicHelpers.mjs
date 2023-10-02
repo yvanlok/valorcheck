@@ -133,9 +133,8 @@ export async function fetchCurrentSeason() {
   const response = await fetch("https://valorant-api.com/v1/seasons");
   const responseData = await response.json();
 
-  const currentTime = Date.now() - 24 * 60 * 60 * 1000; // subtract 24 hours in milliseconds
+  const currentTime = Date.now() - 24 * 60 * 60 * 1000;
 
-  // Find the active season based on the current time
   const activeSeason = responseData.data.find((season) => {
     const startTime = new Date(season.startTime).getTime();
     const endTime = new Date(season.endTime).getTime();
@@ -146,7 +145,6 @@ export async function fetchCurrentSeason() {
     const activeSeasonId = activeSeason.uuid;
     return activeSeasonId;
   } else {
-    // Return a default value or handle the case when no active season is found
     return undefined;
   }
 }

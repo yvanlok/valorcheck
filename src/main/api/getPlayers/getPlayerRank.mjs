@@ -69,7 +69,7 @@ export async function fetchRankHenrik(puuid) {
   const currentTimestamp = new Date();
   const key = "rank";
 
-  if (playerData[key] && currentTimestamp - new Date(playerData[key].lastUpdated) < 15 * 60 * 1000) {
+  if (playerData[key] && currentTimestamp - new Date(playerData[key].lastUpdated) < 10 * 60 * 1000) {
     return playerData[key].value;
   }
   const region = await fetchRegion();

@@ -6,7 +6,7 @@ export async function getAccount(puuid) {
   const currentTimestamp = new Date();
   const key = "accountData";
 
-  if (playerData[key] && currentTimestamp - new Date(playerData[key].lastUpdated) < 5 * 60 * 1000) {
+  if (playerData[key] && currentTimestamp - new Date(playerData[key].lastUpdated) < 10 * 60 * 1000) {
     return playerData[key].value;
   }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import PlayerCard from "./PlayerCard";
-import PrimaryDivider from "./PrimaryDivider";
 
 type Player = {
   subjectId: string;

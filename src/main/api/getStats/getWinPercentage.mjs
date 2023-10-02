@@ -6,7 +6,7 @@ export async function fetchWinPercent(puuid) {
   const playerData = players[puuid] || {};
   const currentTimestamp = new Date();
 
-  if (playerData.winPercentage && currentTimestamp - new Date(playerData.winPercentage.lastUpdated) < 30 * 60 * 1000) {
+  if (playerData.winPercentage && currentTimestamp - new Date(playerData.winPercentage.lastUpdated) < 10 * 60 * 1000) {
     return playerData.winPercentage.value;
   }
 
