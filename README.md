@@ -2,6 +2,8 @@
 
 <h2>Introducing ValorCheck! The open-source, privacy-friendly alternative to apps such as Blitz.gg, Valorant Tracker and Strats.gg.</h2>
 
+<h2>Development paused for a couple of weeks while I take a break from Valorant</h2>
+
 <p align="center">
 <a href="https://github.com/yvanlok/valorcheck/blob/main/LICENSE" target="_blank">
 <img src="https://img.shields.io/github/license/yvanlok/valorcheck?style=flat-square" alt="licence" />
